@@ -7,13 +7,12 @@ fn main() {
     let path = env::current_dir()
         .expect("Error: Could not get current executable path");
 
-    let mut child = Command::new("cmd.exe")
+    let output = Command::new("cmd.exe")
         .args(["/C", &format!(r"{}\{}",path.to_str().unwrap(), "ChaTOR.exe")])
-        .spawn()
-        .expect("");
+        .output()
+        .expect("Error: Could not execute command");
 
-    child
-        .wait()
-        .expect("Error: Child process encountered an error");
+    std::fs::write("log.txt", &output.stdout)
+        .expect("Error: Could not write to file");
 
 }
